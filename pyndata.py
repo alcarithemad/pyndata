@@ -21,9 +21,11 @@ class Field(object):
         self.name = None
 
     def __get__(self, obj, kind=None):
+        print 'obj', obj, id(obj)
         return obj.field_items[self.name]
 
     def __set__(self, obj, value):
+        print 'obj', obj, id(obj)
         obj.field_items[self.name] = value
 
     def pack(self):
@@ -56,6 +58,7 @@ class uint64(integer): __TYPE__ = 'Q'
 
 class Padding(Field):
     def __init__(self, length):
+        super(Padding, self).__init__()
         self.length = length
         self.default = '\0'*length
 
@@ -66,20 +69,36 @@ class Padding(Field):
         return reader.read(self.length)
 
 class array(Field):
-    pass
+    def __init__(self, kind, length):
+        super(array, self).__init__()
+        self.kind = kind
+        if isinstance(length, int):
+            self.length = lambda: length
+        else:
+            self.length = length
+        self.default = [kind.default for x in xrange(self.length())]
+
+    def pack(self, values):
+        return ''.join(self.kind.pack(item) for item in values)
+
+    def unpack(self, reader):
+        out = []
+        for x in xrange(self.length()):
+            out.append(self.kind.unpack(reader))
+        return out
 
 class StructMeta(type):
     def __new__(cls, name, bases, attrs):
         __FIELDS__ = []
-        field_items = {}
+        field_defaults = {}
         for name, field in attrs.items():
             if issubclass(type(field), Field):
                 field.name = name
-                field_items[name] = field.default
+                field_defaults[name] = field.default
                 __FIELDS__.append(field)
 
         __FIELDS__.sort(key=lambda x:x.index)
-        attrs['field_items'] = field_items
+        attrs['field_defaults'] = field_defaults
         attrs['__FIELDS__'] = __FIELDS__
         new_cls = type.__new__(cls, name, bases, attrs)
         return new_cls
@@ -88,6 +107,8 @@ class Struct(object):
     __metaclass__ = StructMeta
 
     def __init__(self, initial=None):
+        self.field_items = {}
+        self.field_items.update(self.field_defaults)
         if initial:
             self.unpack(initial)
 
@@ -103,17 +124,3 @@ class Struct(object):
         for field in self.__FIELDS__:
             self.field_items[field.name] = field.unpack(reader)
 
-if __name__ == '__main__':
-    s = Struct()
-    print s
-
-    class Foo(Struct):
-        first = int16()
-        second = uint64(default=32)
-
-    print 'f', Foo
-    print Foo.__FIELDS__
-    f = Foo('\xff'*10)
-    f.first = 5
-    print f.first, f.second
-    print f.field_items
