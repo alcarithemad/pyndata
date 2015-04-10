@@ -4,7 +4,7 @@ import struct
 try:
     from cStringIO import StringIO
 except:
-    import StringIO
+    from StringIO import StringIO
 
 def __nextfield__():
     return __nextfield__.count.next()
