@@ -87,6 +87,42 @@ class array(Field):
             out.append(self.kind.unpack(reader))
         return out
 
+class null_string(Field):
+    def __init__(self, maxlength, padded=False, allow_max=False):
+        super(null_string, self).__init__()
+        self.maxlength = maxlength
+        self.padded = padded
+        self.default = ''
+        self.allow_max = allow_max
+
+    def pack(self, value):
+        if self.allow_max:
+            if len(value) > self.maxlength:
+                raise ValueError
+        else:
+            if len(value) >= self.maxlength:
+                raise ValueError
+        value = (value+'\0')[:self.maxlength]
+        if self.padded:
+            pad = self.maxlength - len(value)
+            value += '\0'*pad
+        return value
+
+    def unpack(self, reader):
+        if self.padded:
+            value = reader.read(self.maxlength)
+        else:
+            value = ['']
+            i = 0
+            m = self.maxlength + (1 if self.allow_max else 0)
+            while value[-1] != '\0' and i < m:
+                value.append(reader.read(1))
+                i += 1
+            value = ''.join(value)
+        value = value.rstrip('\0')
+        print 'value', repr(value)
+        return value
+
 class StructMeta(type):
     def __new__(cls, name, bases, attrs):
         __FIELDS__ = []
