@@ -54,26 +54,26 @@ def test_padding_pack():
     x.unpack('\x20\x01\x02\x03')
     assert x.pad == '\x01\x02\x03'
 
-class FixedArrayExample(pyndata.Struct):
+class FixedArrayTests(pyndata.Struct):
     arr = pyndata.array(pyndata.uint8(), 3)
 
 def test_array_unpack():
-    x = FixedArrayExample()
+    x = FixedArrayTests()
     x.unpack('\x01\x02\x03')
     assert x.arr == [1,2,3]
 
 def test_array_pack():
-    x = FixedArrayExample()
+    x = FixedArrayTests()
     x.arr = [4,5,6]
     packed = x.pack()
     assert packed == '\x04\x05\x06'
 
-# TODO: VariableArrayExample
+# TODO: VariableArrayTests
 
 class NullStringTests(pyndata.Struct):
-    str1 = pyndata.null_string(maxlength=4)
-    str2 = pyndata.null_string(maxlength=4, padded=True)
-    str3 = pyndata.null_string(maxlength=4, allow_max=True)
+    str1 = pyndata.null_string(max_length=4)
+    str2 = pyndata.null_string(max_length=4, padded=True)
+    str3 = pyndata.null_string(max_length=4, allow_max=True)
 
 def test_null_string_pack():
     x = NullStringTests()
