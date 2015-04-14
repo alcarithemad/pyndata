@@ -110,11 +110,15 @@ class StructWithSubStruct(pyndata.Struct):
     print s1
     s2 = SubStruct()
 
-def test_sub_struct():
+def test_sub_struct_unpack():
     t = StructWithSubStruct('\xff\xcc')
-    print StructWithSubStruct.s1
-    print 'it', t.field_items
-    print 'dt', t.field_defaults
-    print 'in test', hex(id(t.s1))
     assert t.s1.x == 0xff
     assert t.s2.x == 0xcc
+
+def test_sub_struct_pack():
+    t = StructWithSubStruct()
+    t.s1.x = 0x20
+    t.s2.x = 0x44
+    packed = t.pack()
+    assert packed == '\x20\x44'
+
