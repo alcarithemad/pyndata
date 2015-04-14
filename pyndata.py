@@ -22,11 +22,9 @@ class Field(object):
         self.name = None
 
     def __get__(self, obj, kind=None):
-        print 'obj', obj, id(obj)
         return obj.field_items[self.name]
 
     def __set__(self, obj, value):
-        print 'obj', obj, id(obj)
         obj.field_items[self.name] = value
 
     def pack(self):
@@ -124,26 +122,53 @@ class null_string(Field):
         print 'value', repr(value)
         return value
 
+class StructField(Field):
+    
+    def __init__(self, struct_):
+        self.__DEFAULT__ = struct_
+        super(StructField, self).__init__()
+        self.index = struct_.index
+        self.struct = type(struct_)
+        print 'ss', self.struct, struct_
+
+    def __get__(self, obj, kind=None):
+        return obj.field_items[self.name]
+
+    def pack(self, value):
+        return value.pack()
+
+    def unpack(self, reader):
+        return self.struct(reader)
+
+class StructInheritor:
+    pass
+
 class StructMeta(type):
-    def __new__(cls, name, bases, attrs):
-        __FIELDS__ = []
+    def __new__(cls, cls_name, bases, attrs):
+        fields = []
         field_defaults = {}
         for name, field in attrs.items():
             if issubclass(type(field), Field):
                 field.name = name
                 field_defaults[name] = field.default
-                __FIELDS__.append(field)
-
-        __FIELDS__.sort(key=lambda x:x.index)
-        attrs['field_defaults'] = field_defaults
-        attrs['__FIELDS__'] = __FIELDS__
-        new_cls = type.__new__(cls, name, bases, attrs)
+                fields.append(field)
+            elif issubclass(type(field), StructInheritor):
+                sf = StructField(field)
+                sf.name = name
+                field_defaults[name] = sf.default
+                fields.append(sf)
+                attrs[name] = sf
+        fields.sort(key=lambda x:x.index)
+        new_cls = type.__new__(cls, cls_name, bases, attrs)
+        new_cls.field_defaults = field_defaults
+        new_cls.__FIELDS__ = fields
         return new_cls
 
-class Struct(object):
+class Struct(object, StructInheritor):
     __metaclass__ = StructMeta
 
     def __init__(self, initial=None):
+        self.index = __nextfield__()
         self.field_items = copy.deepcopy(self.field_defaults)
         if initial:
             self.unpack(initial)
