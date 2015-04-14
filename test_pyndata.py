@@ -102,12 +102,8 @@ def test_null_string_unpack():
 class SubStruct(pyndata.Struct):
     x = pyndata.uint8()
 
-print '1', SubStruct
-print '2', SubStruct()
-
 class StructWithSubStruct(pyndata.Struct):
     s1 = SubStruct()
-    print s1
     s2 = SubStruct()
 
 def test_sub_struct_unpack():
