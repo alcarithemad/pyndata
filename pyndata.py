@@ -1,3 +1,4 @@
+import copy
 import itertools
 import struct
 
@@ -143,8 +144,7 @@ class Struct(object):
     __metaclass__ = StructMeta
 
     def __init__(self, initial=None):
-        self.field_items = {}
-        self.field_items.update(self.field_defaults)
+        self.field_items = copy.deepcopy(self.field_defaults)
         if initial:
             self.unpack(initial)
 
