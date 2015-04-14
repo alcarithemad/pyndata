@@ -99,3 +99,22 @@ def test_null_string_unpack():
     assert x.str2 == 'as'
     assert x.str3 == '1234'
 
+class SubStruct(pyndata.Struct):
+    x = pyndata.uint8()
+
+print '1', SubStruct
+print '2', SubStruct()
+
+class StructWithSubStruct(pyndata.Struct):
+    s1 = SubStruct()
+    print s1
+    s2 = SubStruct()
+
+def test_sub_struct():
+    t = StructWithSubStruct('\xff\xcc')
+    print StructWithSubStruct.s1
+    print 'it', t.field_items
+    print 'dt', t.field_defaults
+    print 'in test', hex(id(t.s1))
+    assert t.s1.x == 0xff
+    assert t.s2.x == 0xcc
