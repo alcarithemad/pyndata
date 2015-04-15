@@ -119,8 +119,28 @@ class null_string(Field):
                 i += 1
             value = ''.join(value)
         value = value.rstrip('\0')
-        print 'value', repr(value)
         return value
+
+class BitField(object):
+    default = 0
+    SHOW = True
+    def __init__(self, field, size, shift):
+        self.index = __nextfield__()
+        self.field = field
+        self.mask = ((1 << size)-1) << shift
+        self.shift = shift
+
+    def __get__(self, obj, kind=None):
+        value = self.field.__get__(obj)
+        return (value & self.mask) >> self.shift
+
+    def __set__(self, obj, value):
+        result = self.field.__get__(obj) & (~self.mask & self.mask)
+        print bin(result), bin(value), bin(self.mask), bin((value & self.mask) << self.shift), bin(self.mask & ~self.mask)
+        result |= (value & self.mask) << self.shift
+        print 'res', result
+        self.field.__set__(obj, result)
+        print 'asdf', self.field.__get__(obj)
 
 class StructField(Field):
     
@@ -129,7 +149,6 @@ class StructField(Field):
         super(StructField, self).__init__()
         self.index = struct_.index
         self.struct = type(struct_)
-        print 'ss', self.struct, struct_
 
     def __get__(self, obj, kind=None):
         return obj.field_items[self.name]
