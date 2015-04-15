@@ -135,12 +135,9 @@ class BitField(object):
         return (value & self.mask) >> self.shift
 
     def __set__(self, obj, value):
-        result = self.field.__get__(obj) & (~self.mask & self.mask)
-        print bin(result), bin(value), bin(self.mask), bin((value & self.mask) << self.shift), bin(self.mask & ~self.mask)
-        result |= (value & self.mask) << self.shift
-        print 'res', result
+        result = self.field.__get__(obj) & ((~self.mask)&((1<<64)-1))
+        result |= ((value << self.shift) & self.mask)
         self.field.__set__(obj, result)
-        print 'asdf', self.field.__get__(obj)
 
 class StructField(Field):
     

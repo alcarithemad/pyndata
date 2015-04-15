@@ -128,8 +128,11 @@ class BitFieldTests(pyndata.Struct):
 def test_bitfield():
     b = BitFieldTests()
     b.bit1 = 3
-    print b.field_items
     b.bit2 = 1
     b.bit3 = 6
     b.bit4 = 0b10101010
-    assert 0 == bin(b.real)
+    assert b.bit1 == 3
+    assert b.bit2 == 1
+    assert b.bit3 == 6
+    assert b.bit4 == 0b10101010
+
