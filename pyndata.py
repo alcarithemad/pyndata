@@ -55,9 +55,9 @@ class uint16(integer): __TYPE__ = 'H'
 class uint32(integer): __TYPE__ = 'I'
 class uint64(integer): __TYPE__ = 'Q'
 
-class Padding(Field):
+class padding(Field):
     def __init__(self, length):
-        super(Padding, self).__init__()
+        super(padding, self).__init__()
         self.length = length
         self.default = '\0'*length
 
