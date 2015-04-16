@@ -68,7 +68,20 @@ def test_array_pack():
     packed = x.pack()
     assert packed == '\x04\x05\x06'
 
-# TODO: VariableArrayTests
+class PaddedArrayTests(pyndata.Struct):
+    arr = pyndata.array(pyndata.uint8(), max_length=3, padded=True)
+
+def test_padded_array_pack():
+    x = PaddedArrayTests()
+    x.arr = [0xc5]
+    packed = x.pack()
+    assert len(packed) == 3
+    assert packed == '\xc5\x00\x00'
+
+def test_padded_array_unpack():
+    x = PaddedArrayTests()
+    x.unpack('\xc5\x00\x00')
+    assert x.arr == [0xc5, 0, 0]
 
 class NullStringTests(pyndata.Struct):
     str1 = pyndata.null_string(max_length=4)

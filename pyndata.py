@@ -68,9 +68,11 @@ class padding(Field):
         return reader.read(self.length)
 
 class array(Field):
-    def __init__(self, kind, length, max_length=None, padded=False):
+    def __init__(self, kind, length=0, max_length=None, padded=False):
         super(array, self).__init__()
         self.kind = kind
+        self.padded = padded
+        self.max_length = max_length
         if isinstance(length, int):
             self.length = lambda: length
         else:
@@ -78,11 +80,19 @@ class array(Field):
         self.default = [kind.default for x in xrange(self.length())]
 
     def pack(self, values):
+        if self.padded:
+            maxlen = self.max_length - len(values)
+            if maxlen > 0:
+                values += [self.kind.default for x in xrange(maxlen)]
         return ''.join(self.kind.pack(item) for item in values)
 
     def unpack(self, reader):
         out = []
-        for x in xrange(self.length()):
+        if self.padded:
+            l = self.max_length
+        else:
+            l = self.length()
+        for x in xrange(l):
             out.append(self.kind.unpack(reader))
         return out
 
@@ -184,6 +194,7 @@ class Struct(object, StructInheritor):
     __metaclass__ = StructMeta
 
     def __init__(self, initial=None):
+        self.default = None
         self.index = __nextfield__()
         self.field_items = copy.deepcopy(self.field_defaults)
         if initial:
