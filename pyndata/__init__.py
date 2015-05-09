@@ -156,7 +156,7 @@ class StructField(Field):
     def unpack(self, reader):
         return self.struct(reader)
 
-class StructInheritor:
+class Struct:
     pass
 
 class StructMeta(type):
@@ -168,7 +168,7 @@ class StructMeta(type):
                 field.name = name
                 field_defaults[name] = field.default
                 fields.append(field)
-            elif issubclass(type(field), StructInheritor):
+            elif issubclass(type(field), Struct):
                 sf = StructField(field)
                 sf.name = name
                 field_defaults[name] = sf.default
@@ -180,7 +180,7 @@ class StructMeta(type):
         new_cls.__FIELDS__ = fields
         return new_cls
 
-class Struct(object, StructInheritor):
+class Struct(object, Struct):
     __metaclass__ = StructMeta
 
     def __init__(self, initial=None):
