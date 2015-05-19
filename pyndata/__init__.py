@@ -189,6 +189,11 @@ class Struct(object, Struct):
         if initial:
             self.unpack(initial)
 
+    def __repr__(self):
+        fields = [repr(getattr(self, field.name)) for field in self.__FIELDS__]
+        ret = '{0}({1})'.format(type(self).__name__, ', '.join(fields))
+        return ret
+
     def pack(self):
         out = []
         for field in self.__FIELDS__:
