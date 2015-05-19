@@ -68,8 +68,10 @@ class padding(Field):
         return reader.read(self.length)
 
 class array(Field):
-    def __init__(self, kind, length, max_length=None, padded=False):
+    def __init__(self, kind, length, padded=False):
         super(array, self).__init__()
+        if issubclass(type(kind), Struct):
+            kind = StructField(kind)    
         self.kind = kind
         if isinstance(length, int):
             self.length = lambda: length
