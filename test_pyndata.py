@@ -136,3 +136,12 @@ def test_bitfield():
     assert b.bit3 == 6
     assert b.bit4 == 0b10101010
 
+class BytestringTests(pyndata.Struct):
+    str1 = pyndata.bytestring(4)
+
+def test_bytestring():
+    t = BytestringTests()
+    t.str1 = 'asdf'
+    assert t.str1 == 'asdf'
+    assert t.pack() == 'asdf'
+

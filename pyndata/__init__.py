@@ -88,6 +88,21 @@ class array(Field):
             out.append(self.kind.unpack(reader))
         return out
 
+class bytestring(Field):
+    def __init__(self, length):
+        super(bytestring, self).__init__()
+        if isinstance(length, int):
+            self.length = lambda: length
+        else:
+            self.length = length
+        self.default = ''
+
+    def pack(self, value):
+        return value
+
+    def unpack(self, reader):
+        return reader.read(self.length())
+
 class null_string(Field):
     def __init__(self, max_length, padded=False, allow_max=False):
         super(null_string, self).__init__()
