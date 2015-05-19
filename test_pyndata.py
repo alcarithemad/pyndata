@@ -42,7 +42,7 @@ def test_unpack():
 
 class padded(pyndata.Struct):
     f = pyndata.uint8(0xff)
-    pad = pyndata.Padding(3)
+    pad = pyndata.padding(3)
 
 def test_padding_unpack():
     x = padded()
