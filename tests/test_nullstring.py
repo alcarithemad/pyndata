@@ -3,9 +3,9 @@ import pytest
 import pyndata
 
 class NullStringTests(pyndata.Struct):
-    str1 = pyndata.null_string(max_length=4)
-    str2 = pyndata.null_string(max_length=4, padded=True)
-    str3 = pyndata.null_string(max_length=4, allow_max=True)
+    str1 = pyndata.nullstring(max_length=4)
+    str2 = pyndata.nullstring(max_length=4, padded=True)
+    str3 = pyndata.nullstring(max_length=4, allow_max=True)
 
 def test_null_string_pack():
     x = NullStringTests()
