@@ -14,4 +14,11 @@ def test_array_pack():
     packed = x.pack()
     assert packed == '\x04\x05\x06'
 
+class S1(pyndata.Struct):
+	f = pyndata.uint8()
+
+class S2(pyndata.Struct):
+	a = pyndata.array(kind=S1(), length=2)
+
+
 # TODO: VariableArrayTests

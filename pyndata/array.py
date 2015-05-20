@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from .field import Field
 from .structure import Struct
+from .structure import StructField
 
 class array(Field):
     def __init__(self, kind, length, padded=False):
