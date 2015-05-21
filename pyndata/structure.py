@@ -43,6 +43,9 @@ class Struct(object, Struct):
     def __init__(self, initial=None):
         self.index = __nextfield__()
         self.field_items = copy.deepcopy(self.field_defaults)
+        for field in self.__FIELDS__:
+            for linked in field.linked_fields:
+                linked.owner = self
         if initial:
             self.unpack(initial)
 
