@@ -1,8 +1,5 @@
 from __future__ import absolute_import
 
-import copy
-import struct
-
 from .array import array
 from .bitfield import BitField
 from .bytestring import bytestring
