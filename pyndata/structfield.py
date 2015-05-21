@@ -4,11 +4,11 @@ from .field import Field
 
 class StructField(Field):
     
-    def __init__(self, struct_):
-        self.__DEFAULT__ = struct_
+    def __init__(self, struct):
+        self.__DEFAULT__ = struct
         super(StructField, self).__init__()
-        self.index = struct_.index
-        self.struct = type(struct_)
+        self.index = struct.index
+        self.struct = type(struct)
 
     def __get__(self, obj, kind=None):
         return obj.field_items[self.name]
