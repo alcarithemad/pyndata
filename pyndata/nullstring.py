@@ -10,7 +10,7 @@ class nullstring(Field):
         self.default = ''
         self.allow_max = allow_max
 
-    def pack(self, value):
+    def pack(self, value, struct):
         if self.allow_max:
             if len(value) > self.max_length:
                 raise ValueError
@@ -23,7 +23,7 @@ class nullstring(Field):
             value += '\0'*pad
         return value
 
-    def unpack(self, reader):
+    def unpack(self, reader, struct):
         if self.padded:
             value = reader.read(self.max_length)
         else:

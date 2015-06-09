@@ -8,8 +8,8 @@ class padding(Field):
         self.length = length
         self.default = '\0'*length
 
-    def pack(self, value):
+    def pack(self, value, struct):
         return '\0'*self.length
 
-    def unpack(self, reader):
+    def unpack(self, reader, struct):
         return reader.read(self.length)

@@ -3,24 +3,25 @@ from __future__ import absolute_import
 from .field import Field
 from .structure import Struct
 from .structure import StructField
-from .varlen import VariableLength
+from .variablelength import VariableLength
 
 class array(VariableLength, Field):
     def __init__(self, kind, length):
-        super(array, self).__init__(length)
+        super(array, self).__init__()
         
         if issubclass(type(kind), Struct):
             kind = StructField(kind)
         self.kind = kind
 
+        self.length = length
+
         self.default = []
 
-    def pack(self, values):
-        return ''.join(self.kind.pack(item) for item in values)
+    def pack(self, values, struct):
+        return ''.join(self.kind.pack(item, struct) for item in values)
 
-    def unpack(self, reader):
+    def unpack(self, reader, struct):
         out = []
-        print self.length
-        for x in xrange(self.length()):
-            out.append(self.kind.unpack(reader))
+        for x in xrange(self.get_length(struct)):
+            out.append(self.kind.unpack(reader, struct))
         return out

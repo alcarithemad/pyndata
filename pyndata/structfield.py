@@ -13,8 +13,8 @@ class StructField(Field):
     def __get__(self, obj, kind=None):
         return obj.field_items[self.name]
 
-    def pack(self, value):
+    def pack(self, value, struct):
         return value.pack()
 
-    def unpack(self, reader):
+    def unpack(self, reader, struct):
         return self.struct(reader)

@@ -10,10 +10,10 @@ class integer(Field):
     __TYPE__ = 'b'
     __DEFAULT__ = 0
 
-    def pack(self, value):
+    def pack(self, value, _struct):
         return struct.pack(self.__TYPE__, value)
 
-    def unpack(self, reader):
+    def unpack(self, reader, _struct):
         size = struct.calcsize(self.__TYPE__)
         data = reader.read(size)
         return struct.unpack(self.__TYPE__, data)[0]

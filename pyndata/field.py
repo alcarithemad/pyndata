@@ -21,8 +21,8 @@ class Field(object):
     def __set__(self, obj, value):
         obj.field_items[self.name] = value
 
-    def pack(self):
+    def pack(self, value, struct):
         raise NotImplementedError
 
-    def unpack(self, reader):
+    def unpack(self, reader, struct):
         raise NotImplementedError

@@ -57,11 +57,11 @@ class Struct(object, Struct):
     def pack(self):
         out = []
         for field in self.__FIELDS__:
-            out.append(field.pack(self.field_items[field.name]))
+            out.append(field.pack(self.field_items[field.name], self))
         return ''.join(out)
 
     def unpack(self, reader):
         if isinstance(reader, str):
             reader = StringIO(reader)
         for field in self.__FIELDS__:
-            self.field_items[field.name] = field.unpack(reader)
+            self.field_items[field.name] = field.unpack(reader, self)
