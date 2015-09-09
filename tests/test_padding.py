@@ -1,7 +1,7 @@
 import pyndata
 
 class padded(pyndata.Struct):
-    f = pyndata.uint8(0xff)
+    f = pyndata.uint8(default=0xff)
     pad = pyndata.padding(3)
 
 def test_padding_unpack():
