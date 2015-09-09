@@ -2,9 +2,12 @@ from __future__ import absolute_import
 
 import itertools
 
-def __nextfield__():
-    return __nextfield__.count.next()
-__nextfield__.count = itertools.count()
+# The basic premise of this whole pile of magic is right here.
+# When we __init__ a field we grab a unique index value for it
+# we use __nextfield__ for that: it's a little odd, but it's just
+# a reference to an otherwise anonymous itertools.count(). This
+# would probably be more idiomatic as a class with a __call__, though.
+__nextfield__ = itertools.count().next
 
 class Field(object):
     __DEFAULT__ = None
