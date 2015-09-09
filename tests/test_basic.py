@@ -37,3 +37,18 @@ def test_unpack():
     x.unpack('\x31\xf0')
     assert x.first == 0x31
     assert x.second == 0xf0
+
+class e(pyndata.Struct):
+    __ENDIAN__ = 'big'
+
+    normal = pyndata.uint16()
+    little = pyndata.uint16(endian='little')
+    big = pyndata.uint16(endian='big')
+
+def test_endian():
+    x = e()
+    x.normal = 0xf010
+    x.little = 0x1311
+    x.big = 0xf3f2
+    packed = x.pack()
+    assert packed == '\xf0\x10\x11\x13\xf3\xf2'
