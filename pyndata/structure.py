@@ -56,6 +56,7 @@ class StructMeta(type):
 
 class Struct(object, Struct):
     __metaclass__ = StructMeta
+    __ENDIAN__ = 'little'
 
     def __init__(self, initial=None):
         self.index = __nextfield__()

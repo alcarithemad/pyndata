@@ -9,14 +9,28 @@ from .field import Field
 class integer(Field):
     __TYPE__ = 'b'
     __DEFAULT__ = 0
+    __ENDIAN__ = None
+
+    def __init__(self, endian=None, enum=None, *args, **kwargs):
+        super(integer, self).__init__(*args, **kwargs)
+        self.__ENDIAN__ = endian
+        self.enum = enum
+
+    def endian(self, _struct):
+        return '>' if (self.__ENDIAN__ or _struct.__ENDIAN__) == 'big' else '<'
 
     def pack(self, value, _struct):
-        return struct.pack(self.__TYPE__, value)
+        value = int(value)
+        return struct.pack(self.endian(_struct)+self.__TYPE__, value)
 
     def unpack(self, reader, _struct):
-        size = struct.calcsize(self.__TYPE__)
+        size = struct.calcsize(self.endian(_struct)+self.__TYPE__)
         data = reader.read(size)
-        return struct.unpack(self.__TYPE__, data)[0]
+        value = struct.unpack(self.endian(_struct)+self.__TYPE__, data)[0]
+        try:
+            return self.enum(value)
+        except:
+            return value
 
 class int8(integer): __TYPE__ = 'b'
 class int16(integer): __TYPE__ = 'h'
