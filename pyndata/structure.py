@@ -23,11 +23,15 @@ class StructMeta(type):
         for name, field in attrs.items():
             if issubclass(type(field), Field):
                 field.name = name
+                if name[0] == '_':
+                    field.__SHOW__ = False
                 field_defaults[name] = field.default
                 fields.append(field)
             elif issubclass(type(field), Struct):
                 sf = StructField(field)
                 sf.name = name
+                if name[0] == '_':
+                    sf.__SHOW__ = False
                 field_defaults[name] = sf.default
                 fields.append(sf)
                 attrs[name] = sf
@@ -50,7 +54,8 @@ class Struct(object, Struct):
             self.unpack(initial)
 
     def __repr__(self):
-        fields = [repr(getattr(self, field.name)) for field in self.__FIELDS__]
+        fields = [field.name+'='+repr(getattr(self, field.name)) for field in self.__FIELDS__ if field.__SHOW__]
+        fields.extend(field.name+'='+repr(field.__get__(self)) for field in self.bitfields)
         ret = '{0}({1})'.format(type(self).__name__, ', '.join(fields))
         return ret
 

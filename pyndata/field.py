@@ -11,6 +11,7 @@ __nextfield__ = itertools.count().next
 
 class Field(object):
     __DEFAULT__ = None
+    __SHOW__ = True
 
     def __init__(self, default=None):
         self.linked_fields = []
