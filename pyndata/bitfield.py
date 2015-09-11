@@ -4,7 +4,7 @@ from .field import __nextfield__
 
 class BitField(object):
     default = 0
-    SHOW = True
+    __SHOW__ = True
     def __init__(self, field, size, shift, enum=None):
         self.index = __nextfield__()
         self.field = field
