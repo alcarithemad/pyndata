@@ -69,7 +69,7 @@ class Struct(object, Struct):
 
     def __repr__(self):
         fields = [field.name+'='+repr(getattr(self, field.name)) for field in self.__FIELDS__ if field.__SHOW__]
-        fields.extend(field.name+'='+repr(field.__get__(self)) for field in self.bitfields)
+        fields.extend(field.name+'='+repr(field.__get__(self)) for field in self.bitfields if field.__SHOW__)
         ret = '{0}({1})'.format(type(self).__name__, ', '.join(fields))
         return ret
 
