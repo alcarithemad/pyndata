@@ -51,12 +51,14 @@ class Struct(object, Struct):
     __metaclass__ = StructMeta
     __ENDIAN__ = 'little'
 
-    def __init__(self, initial=None):
+    def __init__(self, initial=None, **kwargs):
         self.index = __nextfield__()
         self.field_items = copy.deepcopy(self.field_defaults)
-        for field in self.__FIELDS__:
-            for linked in field.linked_fields:
-                linked.owner = self
+        for k, v in kwargs.items():
+            if hasattr(self, k):
+                setattr(self, k, v)
+            else:
+                raise AttributeError("struct {} has no attribute {}".format(self.__class__.__name__, k))
         if initial:
             self.unpack(initial)
 
