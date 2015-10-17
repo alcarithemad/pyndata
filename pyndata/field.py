@@ -14,7 +14,6 @@ class Field(object):
     __SHOW__ = True
 
     def __init__(self, default=None):
-        self.linked_fields = []
         self.default = default or self.__DEFAULT__
         self.index = __nextfield__()
         self.name = None
