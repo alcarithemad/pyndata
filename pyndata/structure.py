@@ -28,23 +28,18 @@ class StructMeta(type):
         bitfields = []
         field_defaults = {}
         for name, field in attrs.items():
-            if issubclass(type(field), Field):
+            if isinstance(field, Struct):
+                field = StructField(field)
+                attrs[name] = field
+            if isinstance(field, Field):
                 field.name = name
                 if name[0] == '_':
                     field.__SHOW__ = False
                 field_defaults[name] = field.default
                 fields.append(field)
-            elif issubclass(type(field), BitField):
+            elif isinstance(field, BitField):
                 field.name = name
                 bitfields.append(field)
-            elif issubclass(type(field), Struct):
-                sf = StructField(field)
-                sf.name = name
-                if name[0] == '_':
-                    sf.__SHOW__ = False
-                field_defaults[name] = sf.default
-                fields.append(sf)
-                attrs[name] = sf
         fields.sort(key=lambda x:x.index)
         new_cls = type.__new__(cls, cls_name, bases, attrs)
         new_cls.field_defaults = field_defaults
