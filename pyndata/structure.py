@@ -2,10 +2,8 @@ from __future__ import absolute_import
 
 import copy
 
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
+try: from cStringIO import StringIO
+except: from StringIO import StringIO
 
 from .field import __nextfield__
 from .field import Field
