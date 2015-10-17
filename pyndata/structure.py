@@ -43,7 +43,7 @@ class StructMeta(type):
         fields.sort(key=lambda x:x.index)
         new_cls = type.__new__(cls, cls_name, bases, attrs)
         new_cls.field_defaults = field_defaults
-        new_cls.__FIELDS__ = fields
+        new_cls.fields = fields
         new_cls.bitfields = bitfields
         return new_cls
 
@@ -61,19 +61,19 @@ class Struct(object, Struct):
             self.unpack(initial)
 
     def __repr__(self):
-        fields = [field.name+'='+repr(getattr(self, field.name)) for field in self.__FIELDS__ if field.__SHOW__]
+        fields = [field.name+'='+repr(getattr(self, field.name)) for field in self.fields if field.__SHOW__]
         fields.extend(field.name+'='+repr(field.__get__(self)) for field in self.bitfields if field.__SHOW__)
         ret = '{0}({1})'.format(type(self).__name__, ', '.join(fields))
         return ret
 
     def pack(self):
         out = []
-        for field in self.__FIELDS__:
+        for field in self.fields:
             out.append(field.pack(self.field_items[field.name], self))
         return ''.join(out)
 
     def unpack(self, reader):
         if isinstance(reader, str):
             reader = StringIO(reader)
-        for field in self.__FIELDS__:
-            self.field_items[field.name] = field.unpack(reader, self)
+        for field in self.fields:
+            setattr(self, field.name, field.unpack(reader, self))
