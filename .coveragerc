@@ -1,0 +1,7 @@
+[run]
+branch = true
+
+[report]
+skip_covered = true
+exclude_lines =
+    except: from StringIO import StringIO

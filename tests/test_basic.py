@@ -1,3 +1,5 @@
+import pytest
+
 import pyndata
 
 class s(pyndata.Struct):
@@ -52,3 +54,11 @@ def test_endian():
     x.big = 0xf3f2
     packed = x.pack()
     assert packed == '\xf0\x10\x11\x13\xf3\xf2'
+
+def test_field_raises():
+    f = pyndata.Field()
+    with pytest.raises(NotImplementedError):
+        f.pack(None, None)
+
+    with pytest.raises(NotImplementedError):
+        f.unpack(None, None)
