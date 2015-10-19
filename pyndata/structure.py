@@ -39,6 +39,8 @@ class StructMeta(type):
                 fields.append(field)
             elif isinstance(field, BitField):
                 field.name = name
+                if name[0] == '_':
+                    field.__SHOW__ = False
                 bitfields.append(field)
         fields.sort(key=lambda x:x.index)
         new_cls = type.__new__(cls, cls_name, bases, attrs)
