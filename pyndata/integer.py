@@ -43,3 +43,15 @@ class uint8(integer): __TYPE__ = 'B'
 class uint16(integer): __TYPE__ = 'H'
 class uint32(integer): __TYPE__ = 'I'
 class uint64(integer): __TYPE__ = 'Q'
+
+__all__ = [
+    'integer',
+    'int8',
+    'int16',
+    'int32',
+    'int64',
+    'uint8',
+    'uint16',
+    'uint32',
+    'uint64'
+]
