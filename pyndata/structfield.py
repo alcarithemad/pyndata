@@ -10,9 +10,6 @@ class StructField(Field):
         self.index = struct.index
         self.struct = type(struct)
 
-    def __get__(self, obj, kind=None):
-        return obj.field_items[self.name]
-
     def pack(self, value, struct):
         return value.pack()
 

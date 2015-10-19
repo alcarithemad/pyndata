@@ -71,7 +71,7 @@ class Struct(object, Struct):
     def pack(self):
         out = []
         for field in self.fields:
-            out.append(field.pack(self.field_items[field.name], self))
+            out.append(field.pack(field.__get__(self), self))
         return ''.join(out)
 
     def unpack(self, reader):
