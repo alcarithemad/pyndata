@@ -36,3 +36,16 @@ def test_bad_unpack_length():
     v = VariableArray()
     with pytest.raises(pyndata.error):
         v.unpack('\x04\x01\x02\x03')
+
+class ArrayWithBitfieldLength(pyndata.Struct):
+    a = pyndata.uint8()
+    b = pyndata.BitField(a, 8, 0)
+    c = pyndata.array(pyndata.uint8(), length=b)
+
+def test_array_bitfield_length():
+    x = ArrayWithBitfieldLength('\x02\x00\x01')
+    assert x.c == [0, 1]
+    y = ArrayWithBitfieldLength()
+    y.b = 2
+    y.c = [0, 1]
+    assert y.pack() == '\x02\x00\x01'
