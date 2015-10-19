@@ -3,6 +3,10 @@ from __future__ import absolute_import
 from .field import __nextfield__
 
 class BitField(object):
+    '''Represents a bitfield on an integer field *field*.
+    If shift is unspecified, it will be set to the sum of the sizes of the
+    previously defined bitfields attached to the same field.
+    '''
     default = 0
     __SHOW__ = True
     def __init__(self, field, size, shift=None, enum=None):

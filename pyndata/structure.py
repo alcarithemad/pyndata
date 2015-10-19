@@ -5,9 +5,9 @@ import copy
 try: from cStringIO import StringIO
 except: from StringIO import StringIO
 
+from .bitfield import BitField
 from .field import __nextfield__
 from .field import Field
-from .bitfield import BitField
 from .structfield import StructField
 
 # This is a little strange, so it deserves an explanation.
@@ -23,6 +23,8 @@ class Struct:
     pass
 
 class StructMeta(type):
+    '''Makes an ordered list of fields from a class definition.
+    '''
     def __new__(cls, cls_name, bases, attrs):
         fields = []
         bitfields = []

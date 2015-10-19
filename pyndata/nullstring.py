@@ -3,6 +3,13 @@ from __future__ import absolute_import
 from .field import Field
 
 class nullstring(Field):
+    '''A null-terminated string.
+    If padded is True, always reads max_length bytes, and discards everything
+    after the first null byte in the result.
+    If allow_max is true, and the string is max_length bytes long, it will not
+    be required to contain a trailing null byte (e.g., 'asdf' is a valid 
+    max_length=4 string, but only if allow_max=True).
+    '''
     def __init__(self, max_length, padded=False, allow_max=False):
         super(nullstring, self).__init__()
         self.max_length = max_length
