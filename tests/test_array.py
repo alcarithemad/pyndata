@@ -33,8 +33,6 @@ def test_variable_unpack_length():
     assert v.a == [1, 2, 3]
 
 def test_bad_unpack_length():
-    import struct # because unpacking this will pass an empty string to struct.unpack
-
     v = VariableArray()
-    with pytest.raises(struct.error):
+    with pytest.raises(pyndata.error):
         v.unpack('\x04\x01\x02\x03')

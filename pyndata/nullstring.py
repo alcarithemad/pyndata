@@ -13,10 +13,10 @@ class nullstring(Field):
     def pack(self, value, struct):
         if self.allow_max:
             if len(value) > self.max_length:
-                raise ValueError
+                raise ValueError("String length {} exceeds this field's maximum length {}".format(len(value), self.max_length))
         else:
             if len(value) >= self.max_length:
-                raise ValueError
+                raise ValueError("String length {} exceeds this field's maximum length {}".format(len(value), self.max_length))
         value = (value+'\0')[:self.max_length]
         if self.padded:
             pad = self.max_length - len(value)

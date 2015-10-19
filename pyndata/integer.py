@@ -3,8 +3,7 @@ from __future__ import absolute_import
 import struct
 
 from .field import Field
-
-# TODO: endianness
+from .error import error
 
 class integer(Field):
     __TYPE__ = 'b'
@@ -26,6 +25,8 @@ class integer(Field):
     def unpack(self, reader, _struct):
         size = struct.calcsize(self.endian(_struct)+self.__TYPE__)
         data = reader.read(size)
+        if len(data) != size:
+            raise error("Not enough bytes, expected {}, got {}".format(size, repr(data)))
         value = struct.unpack(self.endian(_struct)+self.__TYPE__, data)[0]
         try:
             return self.enum(value)

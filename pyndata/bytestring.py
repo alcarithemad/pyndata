@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from .field import Field
 from .variablelength import VariableLength
+from .error import error
 
 class bytestring(VariableLength, Field):
     def __init__(self, length):
@@ -13,4 +14,9 @@ class bytestring(VariableLength, Field):
         return value
 
     def unpack(self, reader, struct):
-        return reader.read(self.get_length(struct))
+        l = self.get_length(struct)
+        data = reader.read(l)
+        if len(data) != l:
+            raise error("Not enough bytes, expected {}, got {}".format(l, repr(data)))
+        else:
+            return data

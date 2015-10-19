@@ -1,3 +1,5 @@
+import pytest
+
 import pyndata
 
 class BytestringTests(pyndata.Struct):
@@ -18,3 +20,8 @@ def test_variable_unpack():
 	v.unpack('\x04asdf')
 	assert v.l == 4
 	assert v.s == 'asdf'
+
+def test_bad_unpack_length():
+    v = VariableBytestring()
+    with pytest.raises(pyndata.error):
+        v.unpack('\x05a')
