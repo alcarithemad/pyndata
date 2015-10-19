@@ -11,3 +11,33 @@ from .nullstring import nullstring
 from .padding import padding
 from .structfield import StructField
 from .structure import Struct
+from .variablelength import VariableLength
+
+__all__ = [
+    '__nextfield__',
+    'array',
+    'BitField',
+    'bytestring',
+    'error',
+    'Field',
+    'integer',
+    'nullstring',
+    'padding',
+    'Struct',
+    'StructField',
+    'VariableLength'
+] + [
+    'int8',
+    'int16',
+    'int32',
+    'int64',
+    'uint8',
+    'uint16',
+    'uint32',
+    'uint64'
+]
+
+for name in __all__:
+    o = globals()[name]
+    if isinstance(o, type):
+        o.__module__ = 'pyndata'
