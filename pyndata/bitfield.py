@@ -5,7 +5,10 @@ from .field import __nextfield__
 class BitField(object):
     default = 0
     __SHOW__ = True
-    def __init__(self, field, size, shift, enum=None):
+    def __init__(self, field, size, shift=None, enum=None):
+        if shift == None:
+            shift = field.current_offset
+            field.current_offset += size
         self.index = __nextfield__()
         self.field = field
         self.mask = ((1 << size)-1) << shift

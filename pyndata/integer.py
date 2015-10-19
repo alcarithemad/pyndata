@@ -14,6 +14,7 @@ class integer(Field):
         super(integer, self).__init__(*args, **kwargs)
         self.__ENDIAN__ = endian
         self.enum = enum
+        self.current_offset = 0 # for bitfields
 
     def endian(self, _struct):
         return '>' if (self.__ENDIAN__ or _struct.__ENDIAN__) == 'big' else '<'
