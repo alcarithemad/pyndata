@@ -1,5 +1,10 @@
 from __future__ import absolute_import
 
+import sys
+
+if sys.version_info[0] == 3:
+    xrange = range
+
 from .field import Field
 from .structure import Struct
 from .structure import StructField
@@ -7,12 +12,18 @@ from .variablelength import VariableLength
 
 class array(VariableLength, Field):
     '''An array of *kind* elements of fixed or variable length.
-    kind a :class:`pyndata.Field` or :class:`pyndata.Struct` to be repeated.
-    length an int or Field determining the repeat count.
+    
+    Parameters
+        kind (Field): a :class:`Field` or :class:`Struct` to be repeated.
+        length (int) or (Field): an int or Field determining the repeat count.
 
-    class S(pyndata.Struct):
-        l1 = pyndata.uint8()
-        a1 = pyndata.array(pyndata.uint32(), l1) # an array of 0-255 uint32 values.
+    ::
+
+        class S(pyndata.Struct):
+            l1 = pyndata.uint8()
+            # an array of 0-255 uint32 values.
+            a1 = pyndata.array(pyndata.uint32(), l1)
+
     '''
     def __init__(self, kind, length):
         super(array, self).__init__()
@@ -26,7 +37,7 @@ class array(VariableLength, Field):
         self.default = []
 
     def pack(self, values, struct):
-        return ''.join(self.kind.pack(item, struct) for item in values)
+        return b''.join(self.kind.pack(item, struct) for item in values)
 
     def unpack(self, reader, struct):
         out = []

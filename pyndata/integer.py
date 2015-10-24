@@ -6,6 +6,9 @@ from .field import Field
 from .error import error
 
 class integer(Field):
+    '''A binary packed integer type. This is implemented with the Python stdlib `struct` module.
+    Subclass it and set __TYPE__ on the subclass to a `struct` type code.
+    '''
     __TYPE__ = 'b'
     __DEFAULT__ = 0
     __ENDIAN__ = None

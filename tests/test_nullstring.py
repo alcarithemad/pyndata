@@ -10,7 +10,7 @@ class NullStringTests(pyndata.Struct):
 def test_null_string_pack():
     x = NullStringTests()
     packed = x.pack()
-    assert packed == '\0\0\0\0\0\0'
+    assert packed == b'\0\0\0\0\0\0'
 
 def test_null_string_illegal():
     x = NullStringTests()
@@ -26,7 +26,7 @@ def test_null_string_illegal_allow_max():
 
 def test_null_string_unpack():
     x = NullStringTests()
-    x.unpack('asd\x00as\x00\x001234')
+    x.unpack(b'asd\x00as\x00\x001234')
     assert x.str1 == 'asd'
     assert x.str2 == 'as'
     assert x.str3 == '1234'

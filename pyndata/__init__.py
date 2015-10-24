@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+import sys
+
 from .array import array
 from .bitfield import BitField
 from .bytestring import bytestring
@@ -10,7 +12,10 @@ from .integer import *
 from .nullstring import nullstring
 from .padding import padding
 from .structfield import StructField
-from .structure import Struct
+if sys.version_info[0] == 3:
+    from .structure3 import Struct
+else:
+    from .structure import Struct
 from .variablelength import VariableLength
 
 __all__ = [
@@ -41,3 +46,4 @@ for name in __all__:
     o = globals()[name]
     if isinstance(o, type):
         o.__module__ = 'pyndata'
+

@@ -7,9 +7,9 @@ class padded(pyndata.Struct):
 def test_padding_unpack():
     x = padded()
     packed = x.pack()
-    assert packed == '\xff\0\0\0'
+    assert packed == b'\xff\0\0\0'
 
 def test_padding_pack():
     x = padded()
-    x.unpack('\x20\x01\x02\x03')
-    assert x.pad == '\x01\x02\x03'
+    x.unpack(b'\x20\x01\x02\x03')
+    assert x.pad == b'\x01\x02\x03'

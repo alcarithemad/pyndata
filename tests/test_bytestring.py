@@ -7,9 +7,9 @@ class BytestringTests(pyndata.Struct):
 
 def test_bytestring():
     t = BytestringTests()
-    t.str1 = 'asdf'
-    assert t.str1 == 'asdf'
-    assert t.pack() == 'asdf'
+    t.str1 = b'asdf'
+    assert t.str1 == b'asdf'
+    assert t.pack() == b'asdf'
 
 class VariableBytestring(pyndata.Struct):
 	l = pyndata.uint8()
@@ -17,11 +17,11 @@ class VariableBytestring(pyndata.Struct):
 
 def test_variable_unpack():
 	v = VariableBytestring()
-	v.unpack('\x04asdf')
+	v.unpack(b'\x04asdf')
 	assert v.l == 4
-	assert v.s == 'asdf'
+	assert v.s == b'asdf'
 
 def test_bad_unpack_length():
     v = VariableBytestring()
     with pytest.raises(pyndata.error):
-        v.unpack('\x05a')
+        v.unpack(b'\x05a')

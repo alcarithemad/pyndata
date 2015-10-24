@@ -1,9 +1,13 @@
 from __future__ import absolute_import
 
 import copy
+import sys
 
-try: from cStringIO import StringIO
-except: from StringIO import StringIO
+if sys.version_info[0] == 3:
+    from io import BytesIO as StringIO
+else:
+    try: from cStringIO import StringIO
+    except: from StringIO import StringIO
 
 from .bitfield import BitField
 from .field import __nextfield__
@@ -19,7 +23,7 @@ from .structfield import StructField
 # Struct in the real Struct class below. If it helps, mentally replace every
 # "Struct" before "class Struct(object" (and the on in the base classes there)
 # with "FirstStruct".
-class Struct:
+class Struct(object):
     pass
 
 class StructMeta(type):
@@ -51,7 +55,14 @@ class StructMeta(type):
         new_cls.bitfields = bitfields
         return new_cls
 
-class Struct(object, Struct):
+class Struct(Struct):
+    ''':class:`Struct` is where the magic happens.
+
+    All :class:`Field` and :class:`BitField` objects set as class attributes
+    on a class which subclasses :class:`Struct` will automagically be used in
+    definition order to :meth:`pack` or :meth:`unpack`.
+
+    '''
     __metaclass__ = StructMeta
     __ENDIAN__ = 'little'
 
@@ -73,13 +84,19 @@ class Struct(object, Struct):
         return ret
 
     def pack(self):
+        '''pack packs all Fields in the struct using their :meth:`Field.pack` methods, in
+        order, and returns the resulting :class:`str`.
+        '''
         out = []
         for field in self.fields:
             out.append(field.pack(field.__get__(self), self))
-        return ''.join(out)
+        return b''.join(out)
 
     def unpack(self, reader):
-        if isinstance(reader, str):
+        '''unpack takes a :class:`str` or a file-like object and calls the unpack method
+        of each Field in the struct in order.
+        '''
+        if isinstance(reader, (str, bytes)):
             reader = StringIO(reader)
         for field in self.fields:
             setattr(self, field.name, field.unpack(reader, self))

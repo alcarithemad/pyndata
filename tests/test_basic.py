@@ -27,16 +27,16 @@ def test_unique_field_items():
 def test_pack():
     x = s()
     packed = x.pack()
-    assert packed == '\0\x05'
+    assert packed == b'\0\x05'
 
 def test_initial_unpack():
-    x = s('\x20\xff')
+    x = s(b'\x20\xff')
     assert x.first == 0x20
     assert x.second == 0xff
 
 def test_unpack():
     x = s()
-    x.unpack('\x31\xf0')
+    x.unpack(b'\x31\xf0')
     assert x.first == 0x31
     assert x.second == 0xf0
 
@@ -53,7 +53,7 @@ def test_endian():
     x.little = 0x1311
     x.big = 0xf3f2
     packed = x.pack()
-    assert packed == '\xf0\x10\x11\x13\xf3\xf2'
+    assert packed == b'\xf0\x10\x11\x13\xf3\xf2'
 
 def test_field_raises():
     f = pyndata.Field()

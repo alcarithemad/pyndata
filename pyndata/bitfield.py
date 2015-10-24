@@ -3,9 +3,17 @@ from __future__ import absolute_import
 from .field import __nextfield__
 
 class BitField(object):
-    '''Represents a bitfield on an integer field *field*.
+    '''Represents a bitfield on an :class:`integer` *field*.
     If shift is unspecified, it will be set to the sum of the sizes of the
     previously defined bitfields attached to the same field.
+
+    Parameters
+        field (Field): The Field being masked.
+        size (int): The size of the bitfield, in bits.
+
+    Keyword Arguments
+        shift (int): If provided, overrides the default computation of where the bitfield starts, forcing it to exactly *shift* bits.
+        enum (enum.Enum): If set, converts values to members of the enum before returning them.
     '''
     default = 0
     __SHOW__ = True
