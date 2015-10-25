@@ -9,6 +9,13 @@ class nullstring(Field):
     If allow_max is true, and the string is max_length bytes long, it will not
     be required to contain a trailing null byte (e.g., 'asdf' is a valid 
     max_length=4 string, but only if allow_max=True).
+
+    Parameters
+        max_length (int): ...
+
+    Keyword Arguments
+        padded (bool): ...
+        allow_max (bool): ...
     '''
     def __init__(self, max_length, padded=False, allow_max=False):
         super(nullstring, self).__init__()
