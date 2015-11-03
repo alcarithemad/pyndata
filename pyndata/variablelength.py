@@ -9,3 +9,8 @@ class VariableLength(object):
                 return self.length.__get__(struct)
             else:
                 return self.length
+
+    def __set__(self, obj, value):
+        super(VariableLength, self).__set__(obj, value)
+        if isinstance(self.length, (Field, BitField)):
+            return self.length.__set__(obj, len(value))
