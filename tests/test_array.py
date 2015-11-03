@@ -35,6 +35,7 @@ def test_variable_unpack_length():
 def test_variable_pack():
     v = VariableArray()
     v.a = [1, 2, 3]
+    assert v.l == 3
     assert v.pack() == b'\x03\x01\x02\x03'
 
 def test_bad_unpack_length():

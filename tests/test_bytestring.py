@@ -21,6 +21,12 @@ def test_variable_unpack():
 	assert v.l == 4
 	assert v.s == b'asdf'
 
+def test_variable_pack():
+    v = VariableBytestring()
+    v.s = b'asdf'
+    assert v.l == 4
+    assert v.pack() == b'\x04asdf'
+
 def test_bad_unpack_length():
     v = VariableBytestring()
     with pytest.raises(pyndata.error):
