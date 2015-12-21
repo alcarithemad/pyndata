@@ -1,5 +1,8 @@
 from __future__ import absolute_import
 
+import sys
+
+from .error import error
 from .field import Field
 
 class nullstring(Field):
@@ -13,7 +16,10 @@ class nullstring(Field):
             everything after the first null byte.
         allow_max (bool): allows the field to read exactly ``max_length`` bytes
             with no null terminator.
-        encoding (str): converts the string to this encoding before packing.
+        encoding (str): converts the string to this encoding before packing or 
+            unpacking.
+            If set to ``None``, only packs and unpacks :class:`bytes`. Defaults
+            to ``'utf-8'``.
     '''
     def __init__(self, max_length, padded=False, allow_max=False, encoding='utf-8'):
         super(nullstring, self).__init__()
@@ -25,7 +31,13 @@ class nullstring(Field):
 
     def pack(self, value, struct):
         if isinstance(value, str):
-            value = value.encode(self.encoding)
+            print(self.encoding, type(value), value)
+            if self.encoding:
+                value = value.encode(self.encoding)
+            elif sys.version_info[0] == 2:
+                pass
+            else:
+                raise error
         if self.allow_max:
             if len(value) > self.max_length:
                 raise ValueError("String length {} exceeds this field's maximum length {}".format(len(value), self.max_length))
@@ -48,7 +60,9 @@ class nullstring(Field):
             while value[-1] != '\0' and i < m:
                 value.append(reader.read(1))
                 i += 1
-            print(value)
             value = b''.join(value)
-        value = value.rstrip(b'\0').decode('utf-8')
+            print(value)
+        value = value.rstrip(b'\0')
+        if self.encoding:
+            value = value.decode(self.encoding)
         return value

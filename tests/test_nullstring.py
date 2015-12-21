@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 import pyndata
@@ -30,3 +32,24 @@ def test_null_string_unpack():
     assert x.str1 == 'asd'
     assert x.str2 == 'as'
     assert x.str3 == '1234'
+
+class NullEncodingTests(pyndata.Struct):
+    s1 = pyndata.nullstring(max_length=4, encoding='utf-8')
+    b1 = pyndata.nullstring(max_length=4, encoding=None)
+
+def test_null_string_encoding():
+    x = NullEncodingTests()
+    x.s1 = 'asd'
+    x.b1 = b'xyz'
+    assert x.pack() == b'asd\0xyz\0'
+    x2 = NullEncodingTests(x.pack())
+    print(type(x2.s1))
+    if sys.version_info[0] == 3:
+        strtype = str
+        bytestype = bytes
+    else:
+        strtype = unicode
+        bytestype = str
+    assert isinstance(x2.s1, strtype)
+    assert isinstance(x2.b1, bytestype)
+
