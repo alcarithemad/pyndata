@@ -15,7 +15,7 @@ class array(VariableLength, Field):
     
     Parameters
         kind (Field): a :class:`Field` or :class:`Struct` to be repeated.
-        length (int) or (Field): an int or Field determining the repeat count.
+        length: see :class:`VariableLength` for ways to specify the length of the array.
 
     ::
 

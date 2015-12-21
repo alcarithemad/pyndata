@@ -7,7 +7,7 @@ from .field import Field
 from .variablelength import VariableLength
 
 class bytestring(VariableLength, Field):
-    '''Like array, but unpacked as a python string of arbitrary data.
+    '''Like :class:`array`, but unpacked as a python string of arbitrary data.
 
     Parameters
         length (int) or (Field): The length of the string to read, in bytes.

@@ -4,29 +4,28 @@ from .field import Field
 
 class nullstring(Field):
     '''A null-terminated string.
-    If padded is True, always reads max_length bytes, and discards everything
-    after the first null byte in the result.
-    If allow_max is true, and the string is max_length bytes long, it will not
-    be required to contain a trailing null byte (e.g., 'asdf' is a valid 
-    max_length=4 string, but only if allow_max=True).
 
     Parameters
-        max_length (int): ...
+        max_length (int): the maximum number this string may contain.
 
     Keyword Arguments
-        padded (bool): ...
-        allow_max (bool): ...
+        padded (bool): always read ``max_length`` bytes, discarding 
+            everything after the first null byte.
+        allow_max (bool): allows the field to read exactly ``max_length`` bytes
+            with no null terminator.
+        encoding (str): converts the string to this encoding before packing.
     '''
-    def __init__(self, max_length, padded=False, allow_max=False):
+    def __init__(self, max_length, padded=False, allow_max=False, encoding='utf-8'):
         super(nullstring, self).__init__()
         self.max_length = max_length
         self.padded = padded
         self.default = ''
         self.allow_max = allow_max
+        self.encoding = encoding
 
     def pack(self, value, struct):
         if isinstance(value, str):
-            value = value.encode('utf-8')
+            value = value.encode(self.encoding)
         if self.allow_max:
             if len(value) > self.max_length:
                 raise ValueError("String length {} exceeds this field's maximum length {}".format(len(value), self.max_length))

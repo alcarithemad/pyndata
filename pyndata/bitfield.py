@@ -13,6 +13,7 @@ class BitField(object):
 
     Keyword Arguments
         shift (int): If provided, overrides the default computation of where the bitfield starts, forcing it to exactly *shift* bits.
+            BitFields with explicit shifts will not affect the position of any automatically positioned BitFields.
         enum (enum.Enum): If set, converts values to members of the enum before returning them.
     '''
     default = 0
