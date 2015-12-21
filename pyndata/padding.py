@@ -13,7 +13,7 @@ class padding(Field):
         self.default = b'\0'*length
 
     def pack(self, value, struct):
-        return b'\0'*self.length
+        return value+b'\0'*(self.length-len(value))
 
     def unpack(self, reader, struct):
         return reader.read(self.length)
