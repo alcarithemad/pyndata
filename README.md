@@ -1,7 +1,7 @@
 pyndata - concise struct packing
 ====
 
-Pyndata is a library for dealing with structured binary data in Python. It's vaguely inspired by the bindata library in Ruby.
+Pyndata is a library for dealing with structured binary data in Python. It's vaguely inspired by the [bindata gem for Ruby](https://github.com/dmendel/bindata).
 
 Features
 =====
