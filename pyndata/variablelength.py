@@ -5,7 +5,8 @@ from .bitfield import BitField
 
 class VariableLength(object):
     '''Mixin class for fields with dynamic length.
-    Length can be an :class:`int`, an instance of a :class:`Field` or :class:`BitField`, or a function
+    Length can be an :class:`int`, an instance of a :class:`Field` or
+    :class:`BitField`, or a function
     with the signature f(struct, length=None)
     '''
     def get_length(self, struct):

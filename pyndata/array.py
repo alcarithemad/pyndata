@@ -11,9 +11,9 @@ from .structure import StructField
 from .variablelength import VariableLength
 
 class array(VariableLength, Field):
-    '''An array of *kind* elements of fixed or variable length.
+    '''An array of ``kind`` elements of fixed or variable length.
     
-    Parameters
+    Parameters:
         kind (Field): a :class:`Field` or :class:`Struct` to be repeated.
         length: see :class:`VariableLength` for ways to specify the length of the array.
 

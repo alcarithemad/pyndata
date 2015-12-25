@@ -8,18 +8,17 @@ from .field import Field
 class nullstring(Field):
     '''A null-terminated string.
 
-    Parameters
+    Parameters:
         max_length (int): the maximum number this string may contain.
 
-    Keyword Arguments
-        padded (bool): always read ``max_length`` bytes, discarding 
-            everything after the first null byte.
-        allow_max (bool): allows the field to read exactly ``max_length`` bytes
-            with no null terminator.
-        encoding (str): converts the string to this encoding before packing or 
-            unpacking.
-            If set to ``None``, only packs and unpacks :class:`bytes`. Defaults
-            to ``'utf-8'``.
+    Keyword Arguments:
+        padded (bool): always read ``max_length`` bytes, discarding everything
+            after the first null byte.
+        allow_max (bool): allows the field to read exactly ``max_length``
+            bytes with no null terminator.
+        encoding (str): converts the string to this encoding before packing or
+            unpacking. If set to ``None``, only packs and unpacks
+            :class:`bytes`. Defaults to ``'utf-8'``.
     '''
     def __init__(self, max_length, padded=False, allow_max=False, encoding='utf-8'):
         super(nullstring, self).__init__()

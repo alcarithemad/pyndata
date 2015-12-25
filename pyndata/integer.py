@@ -6,8 +6,17 @@ from .field import Field
 from .error import error
 
 class integer(Field):
-    '''A binary packed integer type. This is implemented with the Python stdlib :mod:`struct` module.
+    '''A binary packed integer type. This is implemented with the Python stdlib
+    :mod:`struct` module.
     Subclass it and set __TYPE__ on the subclass to a :mod:`struct` type code.
+
+    Keyword Arguments:
+        endian (str): ``'big'`` or ``'little'``. Defaults to the __ENDIAN__ of
+            the enclosing :class:`Struct`.
+        enum (enum.Enum):
+            If set, attempts to convert values to members of the enum before
+            returning them.
+
     '''
     __TYPE__ = 'b'
     __DEFAULT__ = 0
@@ -30,7 +39,9 @@ class integer(Field):
         size = struct.calcsize(self.endian(_struct)+self.__TYPE__)
         data = reader.read(size)
         if len(data) != size:
-            raise error("Not enough bytes, expected {}, got {}".format(size, repr(data)))
+            raise error("Not enough bytes, expected {}, got {}".format(
+                size, repr(data))
+            )
         value = struct.unpack(self.endian(_struct)+self.__TYPE__, data)[0]
         try:
             return self.enum(value)

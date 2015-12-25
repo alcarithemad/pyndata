@@ -9,8 +9,10 @@ from .variablelength import VariableLength
 class bytestring(VariableLength, Field):
     '''Like :class:`array`, but unpacked as a python string of arbitrary data.
 
-    Parameters
-        length (int) or (Field): The length of the string to read, in bytes.
+    Parameters:
+        length: see :class:`VariableLength` for ways to specify the length of
+            the array.
+
     '''
     def __init__(self, length):
         super(bytestring, self).__init__()
@@ -28,6 +30,8 @@ class bytestring(VariableLength, Field):
         l = self.get_length(struct)
         data = reader.read(l)
         if len(data) != l:
-            raise error("Not enough bytes, expected {}, got {}".format(l, repr(data)))
+            raise error("Not enough bytes, expected {}, got {}".format(
+                l, repr(data))
+            )
         else:
             return data

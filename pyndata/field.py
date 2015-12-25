@@ -16,11 +16,13 @@ else:
 
 class Field(object):
     '''Parent class of all fields used in :class:`Struct` .
-    Subclass this and implement :meth:`pack` and :meth:`unpack` with your desired field behaviour.
+    Subclass this and implement :meth:`pack` and :meth:`unpack` with your
+    desired field behaviour.
     If you override :meth:`__init__`, be sure to call Field's version.
 
-    Keyword Arguments
+    Keyword Arguments:
         default: The default value for this field.
+    
     '''
     __DEFAULT__ = None
     __SHOW__ = True
@@ -39,11 +41,11 @@ class Field(object):
     def pack(self, value, struct):
         '''Pack a value into a string.
 
-        Parameters
+        Parameters:
             value: The value to be packed.
             struct (Struct): The Struct this value is being packed for.
         
-        Returns
+        Returns:
             str: The packed value.
         '''
         raise NotImplementedError
@@ -51,11 +53,11 @@ class Field(object):
     def unpack(self, reader, struct):
         '''Unpack a value from a string.
 
-        Parameters
+        Parameters:
             reader: A file-like object to read the data from.
             struct (Struct): The Struct this value is being packed for.
         
-        Returns
+        Returns:
             The unpacked value.
         
         '''
