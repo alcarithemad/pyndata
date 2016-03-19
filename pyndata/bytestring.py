@@ -30,8 +30,9 @@ class bytestring(VariableLength, Field):
         l = self.get_length(struct)
         data = reader.read(l)
         if len(data) != l:
-            raise error("Not enough bytes, expected {}, got {}".format(
-                l, repr(data))
+            raise error("Not enough bytes, field {} expected {}, got {} (struct was: {})".format(
+                    self.name, l, repr(data), struct
+                )
             )
         else:
             return data
