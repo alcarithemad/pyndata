@@ -56,3 +56,29 @@ def test_array_bitfield_length():
     y.c = [0, 1]
     assert y.pack() == b'\x02\x00\x01'
 
+# This is disgusting.
+# But it's been a couple of months and I don't remember why.
+class ArrayWithFunctionLength(pyndata.Struct):
+    def __init__(self, *a, **kw):
+        super(ArrayWithFunctionLength, self).__init__(*a, **kw)
+        self.real_length = 3
+
+    def length(self, length=None):
+        if length:
+            self.real_length = length
+        else:
+            return self.real_length
+
+    a = pyndata.array(pyndata.uint8(), length=length)
+
+def test_array_function_length_unpack():
+    v = ArrayWithFunctionLength()
+    print(v.fields[0].length)
+    v.unpack(b'\x01\x02\x03')
+    assert v.a == [1, 2, 3]
+
+def test_array_function_length_pack():
+    v = ArrayWithFunctionLength()
+    v.a = [3, 2, 1]
+    assert v.real_length == 3
+    assert v.pack() == b'\x03\x02\x01'
