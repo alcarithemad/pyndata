@@ -68,7 +68,10 @@ class Struct(Struct):
 
     def __init__(self, initial=None, **kwargs):
         self.index = __nextfield__()
-        self.field_items = copy.deepcopy(self.field_defaults)
+        if initial:
+            self.field_items = {}
+        else:
+            self.field_items = copy.deepcopy(self.field_defaults)
         for k, v in kwargs.items():
             if hasattr(self, k):
                 setattr(self, k, v)
