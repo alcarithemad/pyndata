@@ -26,7 +26,7 @@ class BitField(object):
         if shift == None:
             shift = field.current_offset
             field.current_offset += size
-        self.index = __nextfield__()
+        self.__index__ = __nextfield__()
         self.field = field
         self.mask = ((1 << size)-1) << shift
         self.shift = shift

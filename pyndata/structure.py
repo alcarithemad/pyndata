@@ -48,7 +48,7 @@ class StructMeta(type):
                 if name[0] == '_':
                     field.__SHOW__ = False
                 bitfields.append(field)
-        fields.sort(key=lambda x:x.index)
+        fields.sort(key=lambda x:x.__index__)
         new_cls = type.__new__(cls, cls_name, bases, attrs)
         new_cls.field_defaults = field_defaults
         new_cls.fields = fields
@@ -67,7 +67,7 @@ class Struct(Struct):
     __ENDIAN__ = 'little'
 
     def __init__(self, initial=None, **kwargs):
-        self.index = __nextfield__()
+        self.__index__ = __nextfield__()
         if initial:
             self.field_items = {}
         else:

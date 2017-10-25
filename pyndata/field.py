@@ -29,7 +29,7 @@ class Field(object):
 
     def __init__(self, default=None):
         self.default = default or self.__DEFAULT__
-        self.index = __nextfield__()
+        self.__index__ = __nextfield__()
         self.name = None
 
     def __get__(self, obj, kind=None):
