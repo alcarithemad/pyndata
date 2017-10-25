@@ -26,7 +26,11 @@ class integer(Field):
         super(integer, self).__init__(*args, **kwargs)
         self.__ENDIAN__ = endian
         self.enum = enum
+        self.default = 0
         self.current_offset = 0 # for bitfields
+        self.size = struct.calcsize('>' + self.__TYPE__)
+        self.unpack_big = struct.Struct('>' + self.__TYPE__)
+        self.unpack_little = struct.Struct('<' + self.__TYPE__)
 
     def endian(self, _struct):
         return '>' if (self.__ENDIAN__ or _struct.__ENDIAN__) == 'big' else '<'
@@ -36,11 +40,10 @@ class integer(Field):
         return struct.pack(self.endian(_struct)+self.__TYPE__, value)
 
     def unpack(self, reader, _struct):
-        size = struct.calcsize(self.endian(_struct)+self.__TYPE__)
-        data = reader.read(size)
-        if len(data) != size:
+        data = reader.read(self.size)
+        if len(data) != self.size:
             raise error("Not enough bytes, expected {}, got {}".format(
-                size, repr(data))
+                self.size, repr(data))
             )
         value = struct.unpack(self.endian(_struct)+self.__TYPE__, data)[0]
         try:
