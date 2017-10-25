@@ -1,11 +1,14 @@
 from __future__ import absolute_import
 
+import struct
 import sys
 
 if sys.version_info[0] == 3:
     xrange = range
 
 from .field import Field
+from .error import error
+from .integer import integer
 from .structure import Struct
 from .structure import StructField
 from .variablelength import VariableLength
@@ -36,11 +39,11 @@ class array(VariableLength, Field):
 
         self.default = []
 
-    def pack(self, values, struct):
-        return b''.join(self.kind.pack(item, struct) for item in values)
+    def pack(self, values, _struct):
+        return b''.join(self.kind.pack(item, _struct) for item in values)
 
-    def unpack(self, reader, struct):
+    def unpack(self, reader, _struct):
         out = []
-        for x in xrange(self.get_length(struct)):
-            out.append(self.kind.unpack(reader, struct))
+        for x in xrange(self.get_length(_struct)):
+            out.append(self.kind.unpack(reader, _struct))
         return out
