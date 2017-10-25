@@ -17,7 +17,7 @@ class bytestring(VariableLength, Field):
     def __init__(self, length):
         super(bytestring, self).__init__()
         self.length = length
-        self.default = ''
+        self.default = b''
 
     if sys.version_info[0] == 3:
         def pack(self, value, struct):

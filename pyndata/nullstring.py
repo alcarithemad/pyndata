@@ -24,7 +24,7 @@ class nullstring(Field):
         super(nullstring, self).__init__()
         self.max_length = max_length
         self.padded = padded
-        self.default = ''
+        self.default = b''
         self.allow_max = allow_max
         self.encoding = encoding
 
